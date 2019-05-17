@@ -22,12 +22,12 @@ router.get("/:id", (req, res) => {
   db.getGame(id)
     .then(info => {
       if (info.length === 0 || !info) {
-        res, status(404).json("No Game Exists with this id.");
+        res.status(404).json("No Game Exists with this id.");
       }
       res.status(200).json(info);
     })
     .catch(error => {
-      sendUserError(500, error, res);
+      console.log(error);
       return;
     });
 });
@@ -49,7 +49,9 @@ router.post("/", (req, res) => {
     releaseYear
   })
     .then(response => {
-      res.status(201).json(`The game '${title}' has been added!`);
+      // res.status(205).json(`The game '${title}' has been added!`);
+      res.json(`The game '${title}' has been added!`);
+
     })
     .catch(error => {
       console.log(error);

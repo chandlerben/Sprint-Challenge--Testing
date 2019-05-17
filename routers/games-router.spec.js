@@ -21,6 +21,24 @@ describe("games model", () => {
       expect(games).toHaveLength(1);
     });
 
+    it("should not insert provided game if missing title, return 422", async () => {
+      const res = await request(server).post("/api/games");
+      expect(res.status).toBe(422);
+    });
+
+    it("should insert provided game and return 200", async () => {
+      const testObject = {
+        title: "Zelda",
+        genre: "Awesome",
+        releaseYear: "1995"
+      };
+
+      await request(server)
+        .post("/api/games")
+        .send(testObject)
+        .expect(200);
+    });
+
     it("should return an array with 2 length", async () => {
       await Games.addGame({
         title: "Zelda",
@@ -73,10 +91,11 @@ describe("games model", () => {
       expect(games).toHaveLength(1);
     });
   });
+
   describe("get individual game ()", () => {
-    it("should return 500 with no game posted", async () => {
+    it("should return 404 with no game posted", async () => {
       const res = await request(server).get("/api/games/1");
-      expect(res.status).toBe(500);
+      expect(res.status).toBe(404);
     });
 
     it("get an individual game array after posting", async () => {
@@ -89,6 +108,7 @@ describe("games model", () => {
       await Games.getGame(1);
     });
   });
+
   describe("delete individual game ()", () => {
     it("deleting should return 404 with no game posted", async () => {
       const res = await request(server).delete("/api/games/1");
